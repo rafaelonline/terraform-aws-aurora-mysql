@@ -1,0 +1,58 @@
+---
+stages:
+  - Validate
+  - Plan
+  - Deploy
+  - Destroy
+  
+default:
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - /usr/bin/env
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+  before_script:
+    - export $AWS_ACCESS_KEY_ID
+    - export $AWS_SECRET_ACCESS_KEY
+    - export TF_VAR_password=$TF_VAR_password
+    - terraform init
+  cache:
+    key: terraform
+    paths:
+      - .terraform
+
+terraform_validate:
+  stage: Validate
+  script:
+    - terraform validate
+  only:
+    - banco
+
+terraform_plan:
+  stage: Plan
+  script: 
+    - terraform plan --out plan
+  only:
+    - banco
+  artifacts:
+    paths:
+      - plan
+
+terraform_apply:
+  stage: Deploy
+  script:
+    - terraform apply --auto-approve plan
+  when: manual
+  allow_failure: true
+  only:
+    - banco
+
+terraform_destroy:
+  stage: Destroy
+  script:
+    - terraform destroy --auto-approve
+  when: manual
+  allow_failure: false
+  only:
+    - banco
