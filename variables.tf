@@ -1,8 +1,3 @@
-/*variable "vpc_id" {
-  description = "VPC ID"
-  type        = string
-}*/
-
 variable "global_cluster_identifier" {
   description = "The global cluster identifier specified on aws_rds_global_cluster"
   type        = string
@@ -26,11 +21,13 @@ variable "security_group" {
 
 variable "replication_source_identifier" {
   description = "ARN of a source DB cluster or DB instance if this DB cluster is to be created as a Read Replica."
+  type        = string
   default     = ""
 }
 
 variable "source_region" {
   description = "The source region for an encrypted replica DB cluster."
+  type        = string
   default     = ""
 }
 
@@ -74,7 +71,7 @@ variable "username" {
 variable "password" {
   description = "Master DB password"
   type        = string
-  default = ""
+  default     = ""
 }
 
 variable "final_snapshot_identifier_prefix" {
@@ -181,6 +178,7 @@ variable "enabled_cloudwatch_logs_exports" {
 
 variable "replica_count" {
   description = "Number of reader nodes to create.  If `replica_scale_enable` is `true`, the value of `replica_scale_min` is used instead."
+  type        = number
   default     = 2
 }
 
@@ -214,18 +212,6 @@ variable "auto_minor_version_upgrade" {
   default     = true
 }
 
-variable "performance_insights_enabled" {
-  description = "Specifies whether Performance Insights is enabled or not."
-  type        = bool
-  default     = true
-}
-
-variable "performance_insights_kms_key_id" {
-  description = "The ARN for the KMS key to encrypt Performance Insights data."
-  type        = string
-  default     = ""
-}
-
 variable "ca_cert_identifier" {
   description = "The identifier of the CA certificate for the DB instance"
   type        = string
@@ -244,26 +230,9 @@ variable "permissions_boundary" {
   default     = null
 }
 
-variable endpoint_identifier {
-  type        = string
-  description = "The identifier to use for the new endpoint. This parameter is stored as a lowercase string."
-}
-
-### TAGS ###
-variable "environment" {
-  description = ""
-  type        = string
-}
-
-variable "owner" {
-  description = ""
-  type        = string
-}
-
-
 variable build {
   type        = string
   default     = "Terraform"
-  description = ""
+  description = "Builder"
 }
 

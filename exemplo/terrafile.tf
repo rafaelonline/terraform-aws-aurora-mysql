@@ -1,19 +1,7 @@
-/*locals {
-  vpc_id = data.terraform_remote_state.infra.outputs.vpc_id
-  private_subnets_id = data.terraform_remote_state.infra.outputs.private_subnets_id
-  security_group_id = data.terraform_remote_state.infra.outputs.security_group_aurora_id
-
-
-}*/
-
 module "aurora" {
-  source = "./modules/aurora"
-  #subnets             = local.private_subnets_id
-  #security_group      = [local.security_group_id]
+  source         = "./../"
   subnets        = ["subnet-6a482535", "subnet-9d0b6bfb"]
   security_group = ["sg-40ab664e"]
-
-  #password = "123qwE.." # -> Caso uma senha não seja informada, será gerado uma automatica
 
   name                         = "apidatabase"
   engine                       = "aurora-mysql"
@@ -31,8 +19,4 @@ module "aurora" {
   backtrack_window             = 21600 #6 horas
 
   enabled_cloudwatch_logs_exports = ["error", "slowquery", "audit"]
-
-  ### TAGS ###
-  owner       = "labs"
-  environment = "dev"
 }
